@@ -20,5 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('SeaYou_Api.urls')),
-    path('', include('SeaYou_WebApp.urls'))
+    path('', include('SeaYou_App.urls')),
+
+    # Automatic page refresh in development mode
+    path("__reload__/", include("django_browser_reload.urls"))
 ]
