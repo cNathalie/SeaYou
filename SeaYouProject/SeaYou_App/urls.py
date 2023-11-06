@@ -1,5 +1,5 @@
 from django.urls import path
-from SeaYou_WebApp import views as app_views
+from SeaYou_App import views as app_views
 
 
 urlpatterns = [

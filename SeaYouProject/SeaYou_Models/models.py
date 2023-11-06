@@ -53,6 +53,8 @@ class Waypoint(models.Model):
     waypointid = models.AutoField(db_column='WaypointId', primary_key=True)  # Field name made lowercase.
     waypointname = models.CharField(db_column='WaypointName', unique=True, max_length=10, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     waypointdescription = models.TextField(db_column='WaypointDescription', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    waypointlongitude = models.TextField(db_column='WaypointLongitude', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    waypointlatitude = models.TextField(db_column='WaypointLatitude', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = True
