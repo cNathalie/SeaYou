@@ -21,7 +21,7 @@ class Route(models.Model):
     zonetoid = models.ForeignKey('Zoneto', models.DO_NOTHING, db_column='ZoneToId')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Route'
 
 
@@ -30,7 +30,7 @@ class Routecategory(models.Model):
     routecategoryname = models.CharField(db_column='RouteCategoryName', unique=True, max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'RouteCategory'
 
 
@@ -44,7 +44,7 @@ class Ship(models.Model):
     operationaldraft = models.DecimalField(db_column='OperationalDraft', max_digits=8, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Ship'
         unique_together = (('shipname', 'imo'),)
 
@@ -53,11 +53,11 @@ class Waypoint(models.Model):
     waypointid = models.AutoField(db_column='WaypointId', primary_key=True)  # Field name made lowercase.
     waypointname = models.CharField(db_column='WaypointName', unique=True, max_length=10, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     waypointdescription = models.TextField(db_column='WaypointDescription', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    waypointlongitude = models.TextField(db_column='WaypointLongitude', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    waypointlatitude = models.TextField(db_column='WaypointLatitude', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    waypointlongitude = models.FloatField(db_column='WaypointLongitude', blank=True, null=True)  # Field name made lowercase.
+    waypointlatitude = models.FloatField(db_column='WaypointLatitude', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Waypoint'
 
 
@@ -66,5 +66,5 @@ class Zoneto(models.Model):
     zonetoname = models.CharField(db_column='ZoneToName', unique=True, max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'ZoneTo'

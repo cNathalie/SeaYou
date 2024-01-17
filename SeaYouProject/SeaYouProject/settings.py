@@ -43,10 +43,10 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'rest_framework',
     'tailwind',
-    # 'compressor',
     'SeaYou_Models',
     'SeaYou_Api',
-    'SeaYou_App'
+    'SeaYou_App',
+    'SeaYou_DbInsert'
 ]
 
 # Added for Tailwind
@@ -113,7 +113,7 @@ WSGI_APPLICATION = 'SeaYouProject.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "mssql",
-        "NAME": "SeaYouDatabase",
+        "NAME": "SeaYouDb",
         "USER": "sa",
         "PASSWORD": "SeaYouServer2023",
         "HOST": "127.0.0.1",
@@ -153,7 +153,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,0 +1,90 @@
+{% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% block content %}
+
+
+{% comment %} JSON template-tag {% endcomment %}
+{{ waypoints|json_script:"waypoints_json"}}
+
+<div id="tableContainer" class="flex flex-col items-center m-5">
+
+<h1 class="text-myBlue font-mainFont text-4xl center mb-4">Select a ship to see it's routes</h1>
+
+  <form id="searchForm" method="get" action="{% url 'ships' %}" class="flex flex-row justify-center">
+    <input
+      id="searchInput"
+      type="text"
+      name="search"
+      value="{{ search_query }}"
+      placeholder="Search ship by name"
+      class="block pt-2 ps-10 text-sm text-gray-900 rounded-md mx-2" 
+    />
+    <button type="submit" class='border rounded-md bg-gray-300 hover:bg-myGreen p-2'>Search</button>
+</form>
+ <div id="pagination" class="flex flex-row mt-2 justify-between">
+        <div>
+      {% if ships.has_previous %}
+      <a href="?page=1" class="p-4">&laquo; First</a>
+      <a href="?page={{ ships.previous_page_number }}" class="p-4">Previous</a>
+      {% endif %}
+        </div>
+
+      <div class="px-4">
+        Page {{ ships.number }} of {{ ships.paginator.num_pages }}.
+      </div>
+
+      {% if ships.has_next %}
+      <a href="?page={{ ships.next_page_number }}" class="px-4">Next</a>
+      <a href="?page={{ ships.paginator.num_pages }}" class="px-4">Last &raquo;</a>
+      {% endif %}
+
+  </div>
+
+  <table class=" w-2/4 text-sm text-center font-mainFont border-2 border-myBlue rounded-lg m-5">
+    <thead class="text-lg text-myGreen uppercase bg-gray-50">
+      <tr class="">
+        <th scope="col" class="px-6 py-3">Ship Name</th>
+        <th scope="col" class="px-6 py-3">Ship IMO-number</th>
+        <th scope="col" class="px-6 py-3">View ship's routes</th>
+      </tr>
+    </thead>
+    <tbody>
+            {% for ship in ships %}
+            <tr class="hover:bg-gray-300">
+                <td class="px-6 py-4">{{ ship.shipname }}</td>
+            <td class="px-6 py-4">{{ ship.imo }}</td>
+            <td class="px-6 py-4">
+                <a href="{% url 'shipRoute' ship_imo=ship.imo %}">Routes</a>
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+  </table>
+
+ <h1 class="text-myBlue font-mainFont text-4xl center mb-4">Waypoints</h1>
+
+
+<div id="map" class="border rounded-md p-5" style="height: 400px; width: 600px; margin: auto"></div>
+
+{% comment %} JavaScript for map {% endcomment %}
+<script>
+  const map = L.map("map").setView([51.379, 3.6072], 9);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+  let waypoints = JSON.parse(
+    document.getElementById("waypoints_json").textContent
+  );
+
+  waypoints.forEach((waypoint) => {
+    let marker = L.marker([
+      waypoint.waypointlatitude,
+      waypoint.waypointlongitude,
+    ]).addTo(map);
+    marker.bindPopup(waypoint.waypointdescription).openPopup();
+  });
+</script>
+
+{%endblock%}

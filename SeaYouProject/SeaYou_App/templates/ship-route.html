@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% block content %}
+
+<div class="flex flex-col items-center">
+    <h1 class="text-myBlue font-mainFont text-4xl center mb-4">{{ ship.shipname }}</h1>
+    <table id="shipinfo" class="font-mainFont w-2/4 border text-center">
+        <th class="">
+            <tr class="text-lg bg-slate-300">
+                <td class="p-3">Name</td>
+                <td class="p-3">IMO-nr</td>
+                <td class="p-3">Length</td>
+                <td class="p-3">Width</td>
+                <td class="p-3">Max Draft</td>
+            </tr>
+        </th>
+        <tbody>
+            <tr>
+                <td class="p-3">{{ ship.shipname }}</td>
+                <td class="p-3">{{ ship.imo }}</td>
+                <td class="p-3">{{ ship.max_length }}m</td>
+                <td class="p-3">{{ ship.max_width }}m</td>
+                <td class="p-3">{{ ship.max_draft }}m</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    {% for route in routes %}
+    
+    {% endfor %}
+
+</div>
+
+
+
+
+{%endblock%}
