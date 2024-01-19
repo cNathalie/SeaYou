@@ -44,7 +44,7 @@
       <tr class="">
         <th scope="col" class="px-6 py-3">Ship Name</th>
         <th scope="col" class="px-6 py-3">Ship IMO-number</th>
-        <th scope="col" class="px-6 py-3">View ship's routes</th>
+        <th scope="col" class="px-6 py-3">View details</th>
       </tr>
     </thead>
     <tbody>
@@ -53,7 +53,7 @@
                 <td class="px-6 py-4">{{ ship.shipname }}</td>
             <td class="px-6 py-4">{{ ship.imo }}</td>
             <td class="px-6 py-4">
-                <a href="{% url 'shipRoute' ship_imo=ship.imo %}">Routes</a>
+                <a href="{% url 'shipVisits' ship_imo=ship.imo %}">Details</a>
             </td>
             </tr>
             {% endfor %}

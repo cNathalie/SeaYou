@@ -35,15 +35,31 @@ def ships(request):
         }
     return render(request, "ships.html", context)
 
-def shipRoute(request, ship_imo):
+def shipVisits(request, ship_imo):
     ship = Ship.objects.get(imo=ship_imo)
-    routes = Route.objects.filter(shipid=ship)
+    visits = Route.objects.filter(shipid=ship).order_by().distinct().values('visit', 'journey', 'routecategoryid__routecategoryname', 'dockeddt')
 
+    routes = list(Route.objects.filter(shipid=ship).values( 'visit', 'journey', 'waypointid',
+        'waypointid__waypointlatitude', 'waypointid__waypointlongitude', 'waypointid__waypointdescription', 'waypointdt', 'dockeddt', 'routecategoryid'))
+
+    # Only one timestamp per waypoint needed
+    unique_waypoint_ids = set()
+    unique_routes = []
+
+    for route in routes:
+        waypoint_id = route['waypointid']
+        if waypoint_id not in unique_waypoint_ids:
+            unique_waypoint_ids.add(waypoint_id)
+            unique_routes.append(route)
+    
     context = {
         'ship': ship,
-        'routes' : routes
+        'routes' : unique_routes,
+        'visits' : visits
     }
-    return render(request, 'ship-route.html', context)
+
+
+    return render(request, 'ship-visits.html', context)
 
 def weather(request):
     return render(request, 'weather.html')
