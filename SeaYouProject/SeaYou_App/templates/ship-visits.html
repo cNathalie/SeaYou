@@ -1,12 +1,12 @@
 {% extends "base.html" %} {% load static %}{% block title %} Home {% endblock %} 
 {% block content %}
-<script src="{% static 'Leaflet.Polyline.SnakeAnim.js' %}"></script>
+
 
 
 <div class="flex flex-col items-center">
     <h1 class="text-myBlue font-mainFont text-4xl center mb-4">{{ ship.shipname }}</h1>
     <h2 class= "text-myOrange font-mainFont">Ship's details </h2>
-    <table id="shipinfo" class="font-mainFont w-2/4 border text-center">
+    <table id="shipinfo" class="font-mainFont w-[50vw] border text-center">
         <th class="">
             <tr class="text-lg bg-slate-300">
                 <td class="p-3">Name</td>
@@ -27,20 +27,41 @@
         </tbody>
     </table>
 
+    <h2 class= "text-myOrange font-mainFont pt-5">Choose a visit to display the route </h2>
+    <h2 id="chosenVisit" class= "text-myBlue font-mainFont pt-5">
+      {% comment %} Visit id is dynamically added {% endcomment %}
+    </h2>
+
+    <div id="mapVisits" class="responsiveMap border rounded-md p-5"></div>
+
     <h2 class= "text-myOrange font-mainFont pt-5">Ship's visits </h2>
-   <table id="shipVisits" class="font-mainFont w-2/4 border text-center">
+   <table id="shipVisits" class="font-mainFont w-[50vw] border text-center flex-shrink">
         <th class="">
             <tr class="text-lg bg-slate-300">
                 <td class="p-3">Visit</td>
                 <td class="p-3">Journey</td>
                 <td class="p-3">Routecategory</td>
-                <td class="p-3">Date docked</td>
+                <td class="p-3">Date docked
+                  
+                </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="text-right">
+                <button id="toggleTableBody" onclick='toggleTableBody()'>↓</button>
+              </td>
             </tr>
         </th>
-        <tbody>
+        <tbody id="visitsTableBody">
           {% for visit in visits %}
             <tr>
-                <td class="p-3">{{ visit.visit }}</td>
+                <td class="p-3">
+                  <a href="#"
+                      class="visit-link  hover:underline hover:text-myGreen"
+                      data-visit-id="{{ visit.visit }}"
+                      data-ship-imo="{{ ship.imo }}">
+                    {{ visit.visit }}
+                  </a>
+                </td>
                 <td class="p-3">{{ visit.journey }}</td>
                 <td class="p-3">{{ visit.routecategoryid__routecategoryname }}</td>
                 <td class="p-3">{{ visit.dockeddt }}</td>
@@ -50,83 +71,18 @@
     </table>
   
 
-    {{ routes|json_script:"routes_json"}}
 
-    <div id="map" class="border rounded-md p-5" style="height: 400px; width: 600px; margin: auto"></div>
-
-
-
-{% comment %} JavaScript for map {% endcomment %}
-<script>
-  const map = L.map("map").setView([51.379, 3.6072], 9);
-  
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
-
-  let routes = JSON.parse(
-    document.getElementById("routes_json").textContent);
 
     
 
-    console.log(routes)
+    <div id="markerList" class="flex flex-col items-center">  
+      {% comment %} Markers are dynamically added {% endcomment %}
+    </div>
+
+
+    <script src="{% static 'SeaYou_Scripts/Leaflet.Polyline.SnakeAnim.js' %}"></script>
+    <script src="{% static 'SeaYou_Scripts/VisitRouteMapScript.js' %}"></script>
     
-    let group = [];
-
-for (let i = 0; i < routes.length; i++) {
-
-    const lat = parseFloat(routes[i].waypointid__waypointlatitude);
-    const lng = parseFloat(routes[i].waypointid__waypointlongitude);
-
-    if (typeof lat === 'number' && typeof lng === 'number' && !isNaN(lat) && !isNaN(lng)) {
-    const marker = L.marker([lat, lng]);
-    marker.bindPopup(routes[i].waypointid__waypointdescription);
-
-    group.push(marker);
-
-    if (i < routes.length - 1) {
-        // Check if the next route exists and create a polyline
-        const nextRoute = routes[i + 1];
-        if (nextRoute) {
-          const nextLat = parseFloat(nextRoute.waypointid__waypointlatitude);
-          const nextLng = parseFloat(nextRoute.waypointid__waypointlongitude);
-            const polyline = L.polyline([
-                [lat, lng],
-                [nextLat, nextLng]
-            ]);
-
-            group.push(polyline);
-        }
-    }
-  }
-}
-
-console.log(group);
-  
-  const route = L.featureGroup(group);
-
-  map.fitBounds(route.getBounds());
-
-  map.addLayer(route)
-  
-
-  function snake() {
-    route.snakeIn();
-  };
-
-
-    // Initial delay of 2 seconds
-  setTimeout(function () {
-    snake();
-
-    // Repeat every 7 seconds
-    setInterval(snake, 7000);
-  }, 000);
-</script>
-
-
 </div>
 
 

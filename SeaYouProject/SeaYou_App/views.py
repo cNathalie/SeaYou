@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from SeaYou_Models.models import Waypoint, Ship, Route
 
@@ -60,6 +61,24 @@ def shipVisits(request, ship_imo):
 
 
     return render(request, 'ship-visits.html', context)
+
+def get_routes_for_visit(request, ship_imo, visit_id):
+    ship = Ship.objects.get(imo=ship_imo)
+    routes = list(Route.objects.filter(shipid=ship, visit=visit_id).values( 'visit', 'journey', 'waypointid',
+        'waypointid__waypointlatitude', 'waypointid__waypointlongitude', 'waypointid__waypointdescription', 'waypointdt', 'dockeddt', 'routecategoryid'))
+    
+    # Only one timestamp per waypoint needed
+    unique_waypoint_ids = set()
+    unique_routes = []
+
+    for route in routes:
+        waypoint_id = route['waypointid']
+        if waypoint_id not in unique_waypoint_ids:
+            unique_waypoint_ids.add(waypoint_id)
+            unique_routes.append(route)
+    
+
+    return JsonResponse(unique_routes, safe=False)
 
 def weather(request):
     return render(request, 'weather.html')
