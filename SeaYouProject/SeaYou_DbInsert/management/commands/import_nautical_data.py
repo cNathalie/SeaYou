@@ -13,11 +13,16 @@ class Command(BaseCommand):
     print("Current Working Directory:", os.getcwd())
 
     def handle(self, *args, **options):
-        excel_file_path = './SeaYou_DbInsert/data/Aankomst.xlsx'
+        # excel_file_path = './SeaYou_DbInsert/data/Aankomst.xlsx'
+        excel_file_path = './SeaYou_DbInsert/data/Vertrek.xlsx'
         df = pd.read_excel(excel_file_path)
 
         for index, row in df.iterrows():
             self.stdout.write(self.style.SUCCESS(f"Processing line {index + 1}"))
+            
+            if index >= 54599: 
+                self.stdout.write(self.style.SUCCESS(f"Stopping import at line {index + 1}"))
+                break
 
             ship_imo = row['IMO nummer']
             ship_visit = row['Verblijf']

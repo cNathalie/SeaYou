@@ -9,9 +9,12 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from datetime import timedelta
+from dotenv import load_dotenv
 import os
 from pathlib import Path
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -112,12 +115,12 @@ WSGI_APPLICATION = 'SeaYouProject.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "mssql",
-        "NAME": "SeaYouDb",
-        "USER": "sa",
-        "PASSWORD": "SeaYouServer2023",
-        "HOST": "127.0.0.1",
-        "PORT": "1414",
+        "ENGINE": os.getenv('DB_ENGINE'),
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv('DB_USER'),
+        "PASSWORD": os.getenv('DB_PASSWORD'),
+        "HOST": os.getenv('DB_HOST'),
+        "PORT": os.getenv('DB_PORT'),
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
         },
     },
@@ -169,3 +172,15 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULE = {
+    'refresh-access-token': {
+        'task': 'SeaYouProject.tasks.refresh_access_token',
+        'schedule': timedelta(seconds=20),  # Adjust the interval as needed
+    },
+}

@@ -12,5 +12,5 @@ urlpatterns = [
     path("about", app_views.about, name= 'about'),
     path("contact", app_views.contact, name='contact'),
     # For additional data
-    path('api/get_routes_for_visit/<str:ship_imo>/<str:visit_id>/', app_views.get_routes_for_visit, name='get_routes_for_visit'),
+    path('api/get_routes_for_visit/<str:ship_imo>/<str:visit_id>/<int:route_id>', app_views.get_routes_for_visit, name='get_routes_for_visit'),
 ]

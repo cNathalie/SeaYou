@@ -22,16 +22,17 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
       const visitId = link.dataset.visitId;
       const shipImo = link.dataset.shipImo;
+      const routeId = link.dataset.routeId;
       group = [];
       await clearMap();
       //await clearMarkerList();
       await setChosenVisit(visitId);
-      fetchRoutesForVisit(visitId, shipImo);
+      fetchRoutesForVisit(visitId, shipImo, routeId);
     });
   });
 
-  const fetchRoutesForVisit = (visitId, shipImo) => {
-    fetch(`/api/get_routes_for_visit/${shipImo}/${visitId}/`)
+  const fetchRoutesForVisit = (visitId, shipImo, routeId) => {
+    fetch(`/api/get_routes_for_visit/${shipImo}/${visitId}/${routeId}`)
       .then((response) => response.json())
       .then((routes) => {
         updateMapWithRoutes(routes);
@@ -42,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const updateMapWithRoutes = (routes) => {
-    console.log(routes);
     for (let i = 0; i < routes.length; i++) {
       const lat = parseFloat(routes[i].waypointid__waypointlatitude);
       const lng = parseFloat(routes[i].waypointid__waypointlongitude);
@@ -80,25 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             group.push(polyline);
           }
-        } else {
-          // Adding Port of Antwerp as last stop with docked time
-          const fixedPointLat = 51.310207;
-          const fixedPointLng = 4.275428;
-          const lastPolyline = L.polyline([
-            [lat, lng],
-            [fixedPointLat, fixedPointLng],
-          ]);
-          group.push(lastPolyline);
-
-          const lastMarker = L.marker([fixedPointLat, fixedPointLng])
-            .bindPopup(
-              `<strong>Port of Antwerp</strong> <br/> <strong>Docked at:</strong> ${dockeddt}`
-            )
-            .on("add", () => {
-              lastMarker.openPopup();
-            });
-          group.push(lastMarker);
-        }
+        } 
       }
     }
 
