@@ -78,31 +78,6 @@ def get_routes_for_visit(request, ship_imo, visit_id, route_id):
 
 def weather(request):
 
-    # get access token
-    api_url = os.getenv("NXTPORT_GET_TOKEN")
-    form_data = {
-        "username" : os.getenv("NXTPORT_USERNAME"),
-        "password" : os.getenv("NXTPORT_PASSWORD"),
-        "grant_type" : "password",
-        "client_id" : os.getenv("NXTPORT_ID"),
-        "client_secret" : os.getenv("NXTPORT_SECRET"),
-        "scope" : "openid"
-    }
-
-    response = requests.post(api_url, data=form_data)
-    if response.status_code == 200:
-        # Request was successful
-        print("API call successful!")
-        data = response.json()
-        access_token = data.get("access_token")
-        os.environ["NXTPORT_CURRENT_TOKEN"] = access_token
-        print(access_token)  # Assuming the response is in JSON format
-    else:
-        # Handle errors
-        print(f"API call failed with status code: {response.status_code}")
-        print(response.text)  # Print the response content for debugging
-
-    
     # probeersel
     current_access_token = os.getenv("NXTPORT_CURRENT_TOKEN")
     weather_url = os.getenv("NXTPORT_METEO_URL")
