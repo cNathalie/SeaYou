@@ -68,3 +68,24 @@ class Zoneto(models.Model):
     class Meta:
         managed = False
         db_table = 'ZoneTo'
+
+class AccessToken(models.Model):
+    token = models.CharField(max_length=2000)
+    exp_date = models.DateTimeField()
+
+
+class WeatherCache(models.Model):
+    cashed_weather_data = models.TextField(db_column='CashedWeatherData', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)
+    updated_at = models.DateTimeField()
+
+
+class ETACache(models.Model):
+    name = models.CharField(db_column='Name', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', default='port')
+    cashed_eta_data = models.TextField(db_column='CashedETAData', db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)
+    updated_at = models.DateTimeField()
+
+# class WeatherStation(models.Model):
+#     id = models.AutoField(db_column='id', primary_key=True)
+#     code_name = models.CharField(db_column='CodeName', unique=True, max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')
+#     full_name = models.CharField(db_column='FullName',max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')
+#     longitude

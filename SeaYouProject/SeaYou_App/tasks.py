@@ -1,19 +1,25 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import requests
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
+
 
 load_dotenv()
 
 
 def start():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(refresh_access_token, 'interval', minutes=45)
+    # scheduler.add_job(refresh_access_token) # To run on startup
+    # scheduler.add_job(refresh_weather_data) #To run on startup
+    # scheduler.add_job(refresh_ETA_data) #To run on startup
+    # scheduler.add_job(refresh_access_token, 'interval', minutes=45) # To run every 45 mins
+    # scheduler.add_job(refresh_weather_data, 'interval', minutes=50) #To run every 50 mins
+    # scheduler.add_job(refresh_ETA_data, 'interval', minutes=30) #To run every 30 mins
     scheduler.start()
 
 def refresh_access_token():
-
+    from SeaYou_Models.models import AccessToken
     try:
         print("REFRESH TOKEN _ TASK STARTED")
 
@@ -33,13 +39,88 @@ def refresh_access_token():
             # Request was successful
             print("API call successful!")
             data = response.json()
-            access_token = data.get("access_token")
-            os.environ["NXTPORT_CURRENT_TOKEN"] = access_token
-            print(access_token)  # Assuming the response is in JSON format
+            new_access_token = data['access_token']
+            valid_for = data['expires_in']
+            expires = datetime.now() + timedelta(seconds = valid_for)
+
+            AccessToken.objects.update_or_create(defaults={'token': new_access_token, 'exp_date': expires}) 
+
         else:
             # Handle errors
             print(f"API call to refresh token failed with status code: {response.status_code}")
             print(response.text)  # Print the response content for debugging
     except Exception as e:
          print(f"Error in refresh_access_token task: {e}")
+
+
+def refresh_weather_data():
+    from SeaYou_Models.models import AccessToken, WeatherCache
+
+    locations = ["bos", "kas", "kis", "ros", "zas", "k102"]
+    accumulated_data = []
+
+    # Make an API call for every weather station location
+    current_access_token = AccessToken.objects.first().token
+    weather_url = os.getenv("NXTPORT_METEO_URL")
+
+    weather_headers = {
+        "Authorization" : "Bearer " + current_access_token,
+        "Accept" : "*/*",
+        "Accept-Encoding" : "gzip,deflate,br",
+        "Connection" : "keep-alive",
+        "Content-Type": "application/json",
+    }
+
+    for location in locations:
+        weather_params = {
+            "location": location,
+            "subscription-key": os.getenv("NXTPORT_METEO_SUBKEY")
+        }
+
+        weather_response = requests.get(weather_url, params=weather_params, headers=weather_headers)
+
+        if weather_response.status_code == 200:
+            # Request was successful
+            print(f"WEATHER API call for location {location} successful!")
+            weather_data = weather_response.json()
+            # Add the data to the accumulated_data dict
+            accumulated_data.append(dict(weather_data[0]))
+            
+        else:
+            print(f"WEATHER API call for location {location} failed with status code: {weather_response.status_code}")
+            print(weather_response.text)
+            continue
+    
+    WeatherCache.objects.update_or_create(defaults={'cashed_weather_data': accumulated_data, 'updated_at': datetime.now()})
+
+
+def refresh_ETA_data():
+    from SeaYou_Models.models import ETACache, AccessToken
+
+    current_access_token = AccessToken.objects.first().token
+    eta_url = os.getenv("NXTPORT_ETA_URL")
+    eta_headers = {
+        "Authorization" : "Bearer " + current_access_token,
+        "Ocp-Apim-Subscription-Key" : os.getenv("NXTPORT_ETA_SUBKEY"),
+        "Accept" : "*/*",
+        "Accept-Encoding" : "gzip,deflate,br",
+        "Connection" : "keep-alive",
+        "Content-Type": "application/json",
+    }
+    eta_params = {
+        "portLoCode" : "BEANR" #BElgie ANtwerpen Rechteroever
+    }
+
+    eta_response = requests.get(eta_url, headers=eta_headers, params=eta_params)
+    eta_data = eta_response.json()
+
+    if eta_response.status_code == 200:
+        # Request was successful
+        print(f"ETA API call successful!")
+        eta_data = eta_response.json()
+        ETACache.objects.update_or_create(name = 'BEANR', defaults={"cashed_eta_data" : eta_data, "updated_at" : datetime.now()})
+    else:
+        print(f"ETA API call failed with status code: {eta_response.status_code}")
+        print(eta_response.text)
+        
 

@@ -1,7 +1,79 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% load custom_filters %}
+{% load static %}
 {% block content %}
 
-<h1>SeaYou ETA</h1>
+<script src="{% static 'SeaYou_Scripts/ETASearchScript.js' %}"></script>
 
+<div class="flex flex-col items-center">
+    <h1 class="text-myBlue font-mainFont text-4xl center mb-4">Vessels approaching Port of Antwerp</h1>
+    
+    <div class="my-5 font-mainFont flex flex-col md:lg:flex-row">
+        <div class="flex flex-col mx-2">
+            <label for="searchDate">ETA from</label>
+            <input type="date" id="searchDate" onchange="filterByDate()" placeholder="ETA from..."class="pt-2 mt-2 ps-10 text-sm text-gray-900 rounded-md ">
+        </div>
+        <div class="flex flex-col mx-2">
+            <label for="searchTerminal">Terminal </label>
+             <select id="searchTerminal" onchange="filterTerminal()" class="mt-2 pt-2 ps-2 text-sm text-gray-900 rounded-md">
+                <option value="">Terminal...</option>
+                <option value="K1700">K1700</option>
+                <option value="K913">K913</option>
+                <option value="K869">K869</option>
+                <option value="K1742">K1742</option>
+                <option value="K1718">K1718</option>
+                <option value="K120-K124">K120-K124</option>
+            </select>
+        </div>
+        <div class="flex flex-col mx-2">
+            <label for="searchTerminalOperator">Terminal operator</label>
+            <select id="searchTerminalOperator" onchange="filterTerminalOperator()" class="mt-2 pt-2 ps-2 text-sm text-gray-900 rounded-md">
+                <option value="">Terminal Operator...</option>
+                <option value="DPW">DPW</option>
+                <option value="PSA">PSA</option>
+                <option value="MPET">MPET</option>
+                <option value="CSPZ">CSPZ</option>
+            </select>
+        </div>
+        <div class="flex flex-col mx-2">
+            <label for="searchVesselName">Vessel Name</label>
+            <input type="text" id="searchVesselName" onkeyup="filterVesselName()" placeholder="Vessel name..." class="mt-2 pt-2 ps-10 text-sm text-gray-900 rounded-md" >
+        </div>
+        <div class="flex flex-col mx-2">
+            <label for="searchVesselIMO">Vessel IMO</label>
+            <input type="text" id="searchVesselIMO" onkeyup="filterVesselIMO()" placeholder="Vessel imo..." class="mt-2 pt-2 ps-10 text-sm text-gray-900 rounded-md" >
+        </div>
+    </div>
+    
+    <table id="myTable" class="font-mainFont text-left">
+        <thead>
+            <tr class="text-lg text-myGreen uppercase">
+                <th class="py-2 pr-8">Terminal</th>
+                <th class="p-2 pr-8">Terminal Operator</th>
+                <th class="p-2 pr-8">Vessel Name</th>
+                <th class="p-2 pr-8">Vessel IMO</th>
+                <th class="p-2 pr-8">Voyage Out</th>
+                <th class="p-2">ETA</th>
+                <th class="p-2">ETD</th>
+                <th class="p-2">Cargo Opening</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eta in data %}
+                <tr class="border-t-2 hover:bg-slate-300">
+                    <td class="p-2">{{eta.terminalCode}}</td>
+                    <td class="p-2">{{eta.terminalOperatorCode}}</td>
+                    <td class="p-2">{{eta.vesselName}}</td>
+                    <td class="p-2">{{eta.imo}}</td>
+                    <td class="p-2">{{eta.voyageOut}}</td>
+                    <td class="p-2">{{eta.eta|parse_and_format_date}}</td>
+                    <td class="p-2">{{eta.etd|parse_and_format_date}}</td>
+                    <td class="p-2">{{eta.cargoOpening|parse_and_format_date}}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
 
 {%endblock%}

@@ -1,6 +1,8 @@
 {% extends "base.html" %} {% load static %} {% block title %} Home {% endblock %} 
+{% load static %}
 {% block content %}
 
+<script src="{% static 'SeaYou_Scripts/ShipsSearchScript.js' %}"></script>
 {% comment %} JSON template-tag {% endcomment %}
 {{ waypoints|json_script:"waypoints_json"}}
 
@@ -8,18 +10,13 @@
 
 <h1 class="text-myBlue font-mainFont text-4xl center mb-4">Select a ship to see it's routes</h1>
 
-  <form id="searchForm" method="get" action="{% url 'ships' %}" class="flex flex-row justify-center">
-    <input
-      id="searchInput"
-      type="text"
-      name="search"
-      value="{{ search_query }}"
-      placeholder="Search ship by name"
-      class="block pt-2 ps-10 text-sm text-gray-900 rounded-md mx-2" 
-    />
-    <button type="submit" class='border rounded-md bg-gray-300 hover:bg-myGreen p-2'>Search</button>
-</form>
- <div id="pagination" class="flex flex-row mt-2 justify-between">
+ <div class="font-mainFont flex flex-row">
+    <input id="shipInput" type="text" onkeyup="searchShipName()" name="search" placeholder="Search ship by name" class="block pt-2 ps-10 text-sm text-gray-900 rounded-md mx-2" />
+      
+    <input id="imoInput" type="text" onkeyup="searchShipIMO()" name="search" placeholder="Search ship by IMO" class="block pt-2 ps-10 text-sm text-gray-900 rounded-md mx-2" />
+  </div>
+  
+<div id="pagination" class="font-mainFont flex flex-row mt-2 justify-between">
         <div>
       {% if ships.has_previous %}
       <a href="?page=1" class="p-4">&laquo; First</a>
@@ -38,7 +35,7 @@
 
   </div>
 
-  <table class=" w-2/4 text-sm text-center font-mainFont border-2 border-myBlue rounded-lg m-5">
+  <table id="shipsTable" class=" w-2/4 text-sm text-center font-mainFont  rounded-md m-5">
     <thead class="text-lg text-myGreen uppercase bg-gray-50">
       <tr class="">
         <th scope="col" class="px-6 py-3">Ship Name</th>

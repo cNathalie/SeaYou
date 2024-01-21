@@ -1,11 +1,11 @@
-import os
-import requests
+
+import json
 from django.shortcuts import render
 from dotenv import load_dotenv
 from operator import itemgetter
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from SeaYou_Models.models import Waypoint, Ship, Route
+from SeaYou_Models.models import Waypoint, Ship, Route, WeatherCache, ETACache
 
 load_dotenv()
 
@@ -26,19 +26,19 @@ def ships(request):
         # If page is not an integer, deliver the first page
         ships = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g., 9999), deliver the last page
+        # If page is out of range, deliver the last page
         ships = paginator.page(paginator.num_pages)
 
-    # Search functionality
-    search_query = request.GET.get('search', '')
-    if search_query:
-        ships = Ship.objects.filter(shipname__icontains=search_query.lower())
+    # # Search functionality
+    # search_query = request.GET.get('search', '')
+    # if search_query:
+    #     ships = Ship.objects.filter(shipname__icontains=search_query.lower())
 
     waypoints = list(Waypoint.objects.values('waypointdescription', 'waypointlatitude', 'waypointlongitude'))
     context = {
         'waypoints': waypoints, 
         'ships': ships,
-        'search_query': search_query
+        # 'search_query': search_query
         }
     return render(request, "ships.html", context)
 
@@ -77,44 +77,32 @@ def get_routes_for_visit(request, ship_imo, visit_id, route_id):
 
 
 def weather(request):
+    
+    cashed_data = WeatherCache.objects.first()
+    weather_data = cashed_data.cashed_weather_data
+    updated_at = cashed_data.updated_at
 
-    # probeersel
-    current_access_token = os.getenv("NXTPORT_CURRENT_TOKEN")
-    weather_url = os.getenv("NXTPORT_METEO_URL")
-    weather_params = {
-        "location" : "k102",
-        "subscription-key" : os.getenv("NXTPORT_METEO_SUBKEY")
-    }
-    weather_headers = {
-        "Authorization" : "Bearer " + current_access_token,
-        "Accept" : "*/*",
-        "Accept-Encoding" : "gzip,deflate,br",
-        "Connection" : "keep-alive",
-        "Content-Type": "application/json",
+    context: {
+        'data' : weather_data,
+        'timestamp' : updated_at
     }
 
-    weather_response = requests.get(weather_url, params=weather_params, headers=weather_headers)
+    return render(request, 'weather.html', context)
 
-    if weather_response.status_code == 200:
-        # Request was successful
-        print("API weather call successful!")
-        weather_data = weather_response.json()
-        print(weather_data)  # Assuming the response is in JSON format
-    else:
-        # Handle errors
-        print(f"WEATHER API call failed with status code: {weather_response.status_code}")
-        print(weather_response.text)  # Print the response content for debugging
-
-    return render(request, 'weather.html')
-
-
-
-def get_weather_for_station(request, station):
-
-    return JsonResponse("")
 
 def eta(request):
-    return render(request, 'eta.html')
+
+    eta_data = ETACache.objects.filter(name='BEANR').first().cashed_eta_data
+    # Formatting as json:
+    eta_formatted = eta_data.replace("'", '"').replace("None", '"Unknown"')
+    # Converting to a dict
+    data_dict = json.loads(eta_formatted)
+    
+    context = {
+        'data' : data_dict
+    }
+
+    return render(request, 'eta.html', context)
 
 def about(request):
     return render(request, "about.html")

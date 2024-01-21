@@ -1,7 +1,12 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} 
 {% block content %}
 
-<h1>SeaYou Weather</h1>
+<h1>SeaYou Weather </h1>
+{% for item in data %}
+        <h1>Location: {{ item.location.name }}</h1>
+        <!-- Other weather information for the location -->
+    {% endfor %}
+
 
 
 {%endblock%}
