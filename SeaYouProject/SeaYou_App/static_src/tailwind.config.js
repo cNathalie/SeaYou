@@ -7,12 +7,11 @@
 
 module.exports = {
   content: [
-    //Added for  FLOWBITE
-    "./node_modules/flowbite/**/*.js",
 
     /**
      * HTML. Paths to Django template files that will contain Tailwind CSS classes.
      */
+    "../templates/*.html",
 
     /*  Templates within theme app (<tailwind_app_name>/templates), e.g. base.html. */
     "../templates/**/*.html",
@@ -45,16 +44,16 @@ module.exports = {
     // '../../**/*.py'
   ],
   theme: {
-    
     extend: {
-    fontFamily: {
-      mainFont: ["Fira Sans Condensed"]
+      fontFamily: {
+        mainFont: ["Fira Sans Condensed"],
+      },
+      colors: {
+        myBlue: "#093D65",
+        myGreen: "#3d9970",
+        myOrange: "#F98E54",
+      },
     },
-    colors: {
-      myBlue: "#093D65",
-      myGreen: "#3d9970",
-      myOrange: "#F98E54",
-    },},
   },
   plugins: [
     /**
@@ -66,6 +65,5 @@ module.exports = {
     require("@tailwindcss/typography"),
     require("@tailwindcss/line-clamp"),
     require("@tailwindcss/aspect-ratio"),
-    require("flowbite/plugin"),
   ],
 };

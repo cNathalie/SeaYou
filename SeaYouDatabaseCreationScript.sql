@@ -40,8 +40,8 @@ CREATE TABLE Waypoint(
 	WaypointId INT IDENTITY(1,1),
 	WaypointName VARCHAR(10) NOT NULL,
 	WaypointDescription VARCHAR(max),
-	WaypointLongitude VARCHAR(max),
-	WaypointLatitude VARCHAR(max),
+	WaypointLongitude FLOAT ,
+	WaypointLatitude FLOAT ,
 	
 	CONSTRAINT PK_WaypointId PRIMARY KEY (WaypointId ),
 	CONSTRAINT UQ_Waypoint_Name UNIQUE (WaypointName)	
