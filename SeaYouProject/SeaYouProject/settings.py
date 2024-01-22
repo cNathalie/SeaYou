@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'tailwind',
     'SeaYou_Models',
-    'SeaYou_Api',
     'SeaYou_App',
     'SeaYou_DbInsert'
 ]
