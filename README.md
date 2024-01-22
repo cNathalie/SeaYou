@@ -1,6 +1,6 @@
 # SeaYou
 
-**Thesis Project Disclosure**
+## Thesis Project Disclosure
 Dear Users,
 
 I would like to inform you that the SeaYou web application is a project developed as part of a graduate thesis. This web app represents a culmination of academic efforts aimed at exploring and applying concepts related to full-stack web development.
@@ -16,10 +16,10 @@ Sincerely,
 
 Nathalie
 
-**Expressions of Gratitude**
+## Expressions of Gratitude
 I extend my heartfelt appreciation to Mr. L. V. for his significant contribution in supplying a crucial part of the data, which has been integral to the success of this project. Additionally, my sincere thanks go to Mr. S. C. for his invaluable assistance in navigating NxtPort-related business matters. Furthermore, I express deep gratitude to Mr. J. S. for providing unwavering support throughout my educational journey. Each of these individuals has played a unique and indispensable role in my professional and academic endeavors. I am truly grateful for their collaborative efforts and unwavering encouragement.
 
-**Disclaimer**
+## Disclaimer
 The SeaYou web application services 'ETA Vessels' and 'Weather @ Port' rely on data sourced from the open-data platform of NxtPort and the Port of Antwerp. While I strive to provide accurate and up-to-date information, we cannot guarantee the correctness, completeness, or reliability of the data presented on the SeaYou web app.
 
 Users are advised that the data is obtained from external sources, and SeaYou is not responsible for any inaccuracies, errors, or omissions in the information provided. It is essential to verify critical information independently before making decisions based on the data displayed on the SeaYou web app.
