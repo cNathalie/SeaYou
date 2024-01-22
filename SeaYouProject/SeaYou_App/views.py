@@ -78,13 +78,12 @@ def get_routes_for_visit(request, ship_imo, visit_id, route_id):
 
 def weather(request):
     
-    cashed_data = WeatherCache.objects.first()
-    weather_data = cashed_data.cashed_weather_data
-    updated_at = cashed_data.updated_at
+    cashed_data = WeatherCache.objects.first().cashed_weather_data
+    weather_formatted = cashed_data.replace("'", '"').replace("None", '"Unknown"')
+    data_dict = json.loads(weather_formatted)
 
-    context: {
-        'data' : weather_data,
-        'timestamp' : updated_at
+    context = {
+        'data' : data_dict
     }
 
     return render(request, 'weather.html', context)

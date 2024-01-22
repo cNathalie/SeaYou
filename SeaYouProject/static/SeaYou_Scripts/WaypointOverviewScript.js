@@ -15,5 +15,7 @@
       waypoint.waypointlatitude,
       waypoint.waypointlongitude,
     ]).addTo(map);
-    marker.bindPopup(waypoint.waypointdescription).openPopup();
+    marker.bindPopup(waypoint.waypointdescription);
+    marker.on('mouseover', (e) => {
+    marker.openPopup()})
   });

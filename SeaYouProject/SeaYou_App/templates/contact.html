@@ -1,7 +1,13 @@
-{% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% extends "base.html" %} {% block title %} Home {% endblock %}
+{% load static %} 
 {% block content %}
 
-<h1>SeaYou Contact</h1>
+<div class="flexColCenter">
+   <h1 class="h1">Contact SeaYou</h1> 
+   <a href="https://github.com/cNathalie" class="link text-center" target="_blank">Find me on GitHub
+   <img src="{% static 'SeaYou_Design/github.png' %}" class="max-w-[400px]" alt=""></a>
+</div>
+
 
 
 {%endblock%}

@@ -8,15 +8,14 @@
 
 <div id="tableContainer" class="flex flex-col items-center m-5">
 
-<h1 class="text-myBlue font-mainFont text-4xl center mb-4">Select a ship to see it's routes</h1>
+  <h1 class="h1">Select a vessel to see it's routes</h1>
 
- <div class="font-mainFont flex flex-row">
-    <input id="shipInput" type="text" onkeyup="searchShipName()" name="search" placeholder="Search ship by name" class="block pt-2 ps-10 text-sm text-gray-900 rounded-md mx-2" />
-      
-    <input id="imoInput" type="text" onkeyup="searchShipIMO()" name="search" placeholder="Search ship by IMO" class="block pt-2 ps-10 text-sm text-gray-900 rounded-md mx-2" />
+  <div class="searchBar">
+    <input id="shipInput" type="text" onkeyup="searchShipName()" name="search" placeholder="Search vessel by name" class="searchInput m-2" />
+    <input id="imoInput" type="text" onkeyup="searchShipIMO()" name="search" placeholder="Search vessel by IMO" class="searchInput m-2" />
   </div>
   
-<div id="pagination" class="font-mainFont flex flex-row mt-2 justify-between">
+  <div id="pagination" class="font-mainFont flexRow mt-2 justify-between">
         <div>
       {% if ships.has_previous %}
       <a href="?page=1" class="p-4">&laquo; First</a>
@@ -32,25 +31,24 @@
       <a href="?page={{ ships.next_page_number }}" class="px-4">Next</a>
       <a href="?page={{ ships.paginator.num_pages }}" class="px-4">Last &raquo;</a>
       {% endif %}
-
   </div>
 
   <table id="shipsTable" class=" w-2/4 text-sm text-center font-mainFont  rounded-md m-5">
-    <thead class="text-lg text-myGreen uppercase bg-gray-50">
-      <tr class="">
-        <th scope="col" class="px-6 py-3">Ship Name</th>
-        <th scope="col" class="px-6 py-3">Ship IMO-number</th>
-        <th scope="col" class="px-6 py-3">View details</th>
+    <thead class="">
+      <tr class="th">
+        <th scope="col">Vessel Name</th>
+        <th scope="col">Vessel IMO-number</th>
+        <th scope="col">View details</th>
       </tr>
     </thead>
     <tbody>
             {% for ship in ships %}
-            <tr class="hover:bg-gray-300">
-                <td class="px-6 py-4">{{ ship.shipname }}</td>
-            <td class="px-6 py-4">{{ ship.imo }}</td>
-            <td class="px-6 py-4">
-                <a href="{% url 'shipVisits' ship_imo=ship.imo %}">Details</a>
-            </td>
+            <tr class="tr">
+                <td class="td">{{ ship.shipname }}</td>
+                <td class="td">{{ ship.imo }}</td>
+                <td class="td">
+                  <a href="{% url 'shipVisits' ship_imo=ship.imo %}">Details</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -58,9 +56,10 @@
 
  <h1 class="text-myBlue font-mainFont text-4xl center mb-4">Waypoints</h1>
 
+</div>
 
+{% comment %} Map of Waypoints {% endcomment %}
 <div id="map" class="responsiveMap"></div>
 
-    <script src="{% static 'SeaYou_Scripts/WaypointOverviewScript.js' %}"></script>
-
+<script src="{% static 'SeaYou_Scripts/WaypointOverviewScript.js' %}"></script>
 {%endblock%}
