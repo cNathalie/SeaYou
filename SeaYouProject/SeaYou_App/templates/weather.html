@@ -1,12 +1,45 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% load static %}
+{% load custom_filters %}
 {% block content %}
 
-<h1>SeaYou Weather </h1>
-{% for item in data %}
-        <h1>Location: {{ item.location.name }}</h1>
-        <!-- Other weather information for the location -->
-    {% endfor %}
+{{ data|json_script:"weatherStations_json"}}
+
+<div class="flexColCenter">
+
+   <h1 class="h1">Live Weather @ Port of Antwerp</h1>
 
 
+    {% comment %} Map {% endcomment %}
+    <div id="weatherMap" class="responsiveMap border rounded-md p-5"></div>  
 
+    <div class="wrappedCardList">
+        {% for station in data %}
+            <div id="weatherCard" class="weatherCard">
+                <h3 class="h3">{{station.location.description|default:station.location.name}}</h3>
+                <div class="flexRow2Cols">
+                    <div id="headers">
+                        <p>Code Name</p>
+                        <p>Average Temp</p>
+                        <p>Minimum Temp</p>
+                        <p>Maximum Temp</p>
+                        <p>Beaufort</p>
+                        <p>Average Windspeed</p>
+                        <p>Time of Reading</p>
+                    </div>
+                    <div id="values" class="text-right ml-2">
+                        <p>{{station.location.name}}</p>
+                        <p>{{station.tt_10}} °C</p>
+                        <p>{{station.tt_min_600}} °C</p>
+                        <p>{{station.tt_max_600}} °C</p>
+                        <p>{{station.ws_600_beaufort|default:'unknown'}}</p>
+                        <p>{{station.ws_600}} m/s</p>
+                        <p>{{station.poa_ingest_time_utc|parse_and_format_date}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>    
+<script src="{% static 'SeaYou_Scripts/WeatherStationsScript.js' %}"></script>
 {%endblock%}

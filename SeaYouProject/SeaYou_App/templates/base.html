@@ -28,7 +28,7 @@
     <title>SeaYou</title>
 	</head>
 
-	<body class="bg-gray-50 font-serif leading-normal tracking-normal">
+	<body class="bg-gray-200 font-serif leading-normal tracking-normal">
     {% comment %} NAVBAR {% endcomment %}
     <nav style="z-index: 2000;" class="bg-white flex flex-col items-center fixed w-full z-20 top-0 left-0 border-b border-gray-200">
       
@@ -64,7 +64,7 @@
                       <li>
                         <a href="{% url 'ships' %}" 
                         class="block px-4 py-2 hover:bg-gray-100 text-myBlue font-extrabold  hover:text-myOrange font-mainFont">
-                        Ship's Route
+                        Vessel Routes
                         </a>
                       </li>
                       <li>
@@ -94,17 +94,22 @@
 
 
     {% comment %} PAGE CONTAINER {% endcomment %}
-    <div id="pageBackground" class="pt-52 h-screen flex flex-col  bg-gray-100">
+    <div id="pageBackground" class="pt-52 h-screen flex flex-col  bg-gray-200 ">
       <div id="pageContainer" class="bg-white rounded-lg p-6 container mx-auto flex-1 ">
 
         {% block content %}
         {% endblock %}
 
       </div>
-      <div class="my-6 container mx-auto self-end bg-white rounded-lg p-6">footer </div>
+          <div class="my-6 container bg-white rounded-lg p-6 mx-auto font-mainFont flex flex-col items-center">
+            <div>© 2024 SeaYou. All rights reserved.</div>
+            <div><a href="{% url 'about' %}" class="link">Disclaimer</a></div>
+          </div>
     </div>
     {% comment %} END PAGE CONTAINER {% endcomment %}
-	</body>
+
+	
+  </body>
 
   {% comment %} For Sea You Scripts {% endcomment %}
     <script src="{% static 'SeaYou_Scripts/NavBarScript.js' %}"></script>

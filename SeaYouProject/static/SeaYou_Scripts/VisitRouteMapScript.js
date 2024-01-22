@@ -5,10 +5,10 @@ Using SnakeAnim plugin
 */
 
 document.addEventListener("DOMContentLoaded", function () {
-  let markerList = document.getElementById("markerList");
   let chosenVisit = document.getElementById("chosenVisit");
   let group = [];
   let map = L.map("mapVisits").setView([51.379, 3.6072], 9);
+  
 
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
       await clearMap();
       //await clearMarkerList();
       await setChosenVisit(visitId);
+      
       fetchRoutesForVisit(visitId, shipImo, routeId);
     });
   });
@@ -91,29 +92,12 @@ document.addEventListener("DOMContentLoaded", function () {
     map.addLayer(route);
 
     const snake = () => {
-      route.snakeIn();
+      const snake = route.snakeIn();
     };
 
     snake();
   };
 
-  const addToMarkerList = async (marker) => {
-    const newMarker = document.createElement("p");
-    newMarker.classList.add("markerItem");
-    const node = document.createTextNode(marker);
-    newMarker.appendChild(node);
-    markerList.appendChild(newMarker);
-  };
-
-  const clearMarkerList = async () => {
-    const markerItems = Array.from(
-      document.getElementsByClassName("markerItem")
-    );
-    for (let index = 0; index < markerItems.length; index++) {
-      const element = markerItems[index];
-      element.remove();
-    }
-  };
 
   const setChosenVisit = async (visitId) => {
     while (chosenVisit.hasChildNodes()) {

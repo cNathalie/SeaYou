@@ -2,3 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .h1 {
+        @apply text-4xl text-myBlue p-5 font-mainFont
+    }
+
+    .h2 {
+        @apply text-2xl text-myGreen font-mainFont
+    }
+
+    .h3 {
+        @apply text-lg text-myGreen font-bold
+    }
+
+    .flexColCenter {
+        @apply flex flex-col items-center
+    }
+
+    .searchBar {
+        @apply my-5 font-mainFont flex flex-col md:lg:flex-row
+    }
+
+    .searchItem {
+        @apply flex flex-col mx-2
+    }
+
+    .searchInput {
+        @apply mt-2 pt-2 ps-2 text-sm text-gray-900 rounded-md font-mainFont
+    }
+
+    .th {
+        @apply py-2 pr-8 text-lg text-myGreen uppercase
+    }
+
+    .tr {
+        @apply border-t-2 hover:bg-slate-300
+    }
+
+    .td {
+        @apply p-2
+    }
+
+    .weatherCard {
+        @apply flex flex-col p-2 items-center border border-gray-500 rounded-md shadow-slate-400 shadow-lg w-[400px] flex-shrink
+    }
+
+    .wrappedCardList {
+        @apply flex flex-wrap w-3/4 gap-5 font-mainFont justify-center my-5
+    }
+
+    .flexRow2Cols {
+        @apply flex flex-row w-full justify-between
+    }
+
+    .flexRow {
+        @apply flex flex-row
+    }
+
+    .p {
+        @apply m-4 font-mainFont
+    }
+
+    .link {
+        @apply text-myGreen hover:underline
+    }
+
+    .emph {
+        @apply text-myGreen font-semibold 
+    }
+
+}

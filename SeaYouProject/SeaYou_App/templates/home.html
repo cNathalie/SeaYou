@@ -1,7 +1,44 @@
 {% extends "base.html" %} {% block title %} Home {% endblock %} 
+{% load static %}
 {% block content %}
 
-<h1>SeaYou Homepage</h1>
+<div class='flexColCenter w-2/4 mx-auto'>
+
+    <h1 class="h1">Welcome to SeaYou</h1>
+    <h2 class='h2'>Charting Your Course, Meeting Your Maritime Needs</h2>
+    <p class="p">
+        Immerse yourself in the maritime world with SeaYou, your go-to destination for real-time insights at the Port of Antwerp. 
+        Our dynamic web app offers a trio of indispensable services tailored just for you.
+    </p>
+    <p class="p">
+    <a href="{% url 'weather' %}" class="emph">Live Weather Updates:</a> Stay ahead of the curve with our up-to-date weather data, 
+    ensuring you're informed about the ever-changing conditions at the Port of Antwerp.
+    </p> 
+    <p class="p">
+        <a href="{% url 'eta' %}" class="emph">Live ETAs for Vessels:</a> Experience precision and efficiency like never before with SeaYou's advanced service! 
+        Our live ETAs not only provide real-time information about vessels approaching the port but go the extra mile by furnishing details on the specific terminal where the vessel is expected to dock. 
+        This level of precision is complemented by crucial insights into the optimal times for transportation trucks to arrive at the dock, ensuring seamless cargo loading operations. 
+        SeaYou empowers you with comprehensive knowledge, allowing you to plan and strategize with confidence, optimizing your logistics processes for maximum efficiency and operational excellence.
+    </p> 
+    <p class="p">
+        <a href="{% url 'ships' %}"  class="emph">Vessel Movements on the Map:</a> Witness the bustling activity at the port unfold right before your eyes. Our interactive map displays the arrivals 
+        and departures of vessels, offering a visual spectacle of maritime movements.
+    </p> 
+
+    <div id="ahoy" class="hidden text-center flex flex-col items-center">
+        <p class="text-center font-mainFont">Ahoy there! I spy with me eye that ye have stumbled upon the hidden treasure! <br/> Well done and hearty congratulations to ye, savvy? Yarrr!</p>
+        <img src="{% static 'SeaYou_Design/cap.png' %}" alt="captain" class="max-w-[200px] " >
+    </div>
+
+    <p class="p">
+        At SeaYou, we're dedicated to keeping you in the <span onclick="ahoy()" class="hover:text-myOrange">captain's</span> seat of your maritime experience. 
+        Navigate effortlessly through the sea of information with our user-friendly interface, and let SeaYou be your compass in the maritime world. 
+        Your needs, met with precision - because at SeaYou, we understand the tides of your business."
+    </p>
+
+ 
+
+</div>
 
 
 {%endblock%}

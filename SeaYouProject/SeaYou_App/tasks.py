@@ -10,12 +10,12 @@ load_dotenv()
 
 def start():
     scheduler = BackgroundScheduler()
-    # scheduler.add_job(refresh_access_token) # To run on startup
-    # scheduler.add_job(refresh_weather_data) #To run on startup
-    # scheduler.add_job(refresh_ETA_data) #To run on startup
-    # scheduler.add_job(refresh_access_token, 'interval', minutes=45) # To run every 45 mins
-    # scheduler.add_job(refresh_weather_data, 'interval', minutes=50) #To run every 50 mins
-    # scheduler.add_job(refresh_ETA_data, 'interval', minutes=30) #To run every 30 mins
+    #scheduler.add_job(refresh_access_token) # To run on startup
+    #scheduler.add_job(refresh_weather_data) #To run on startup
+    #scheduler.add_job(refresh_ETA_data) #To run on startup
+    #scheduler.add_job(refresh_access_token, 'interval', minutes=45) # To run every 45 mins
+    #scheduler.add_job(refresh_weather_data, 'interval', minutes=50) #To run every 50 mins
+    #scheduler.add_job(refresh_ETA_data, 'interval', minutes=30) #To run every 30 mins
     scheduler.start()
 
 def refresh_access_token():
