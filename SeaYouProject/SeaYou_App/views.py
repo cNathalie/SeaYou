@@ -29,16 +29,10 @@ def ships(request):
         # If page is out of range, deliver the last page
         ships = paginator.page(paginator.num_pages)
 
-    # # Search functionality
-    # search_query = request.GET.get('search', '')
-    # if search_query:
-    #     ships = Ship.objects.filter(shipname__icontains=search_query.lower())
-
     waypoints = list(Waypoint.objects.values('waypointdescription', 'waypointlatitude', 'waypointlongitude'))
     context = {
         'waypoints': waypoints, 
         'ships': ships,
-        # 'search_query': search_query
         }
     return render(request, "ships.html", context)
 
@@ -79,8 +73,7 @@ def get_routes_for_visit(request, ship_imo, visit_id, route_id):
 def weather(request):
     
     cashed_data = WeatherCache.objects.first().cashed_weather_data
-    weather_formatted = cashed_data.replace("'", '"').replace("None", '"Unknown"')
-    data_dict = json.loads(weather_formatted)
+    data_dict = json.loads(cashed_data)
 
     context = {
         'data' : data_dict
@@ -92,10 +85,7 @@ def weather(request):
 def eta(request):
 
     eta_data = ETACache.objects.filter(name='BEANR').first().cashed_eta_data
-    # Formatting as json:
-    eta_formatted = eta_data.replace("'", '"').replace("None", '"Unknown"')
-    # Converting to a dict
-    data_dict = json.loads(eta_formatted)
+    data_dict = json.loads(eta_data)
     
     context = {
         'data' : data_dict

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import os
+import json
 import requests
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -9,19 +10,27 @@ load_dotenv()
 
 
 def start():
+    time_to_run_job = datetime.now() + timedelta(seconds=15)
+
     scheduler = BackgroundScheduler()
-    #scheduler.add_job(refresh_access_token) # To run on startup
-    #scheduler.add_job(refresh_weather_data) #To run on startup
-    #scheduler.add_job(refresh_ETA_data) #To run on startup
-    #scheduler.add_job(refresh_access_token, 'interval', minutes=45) # To run every 45 mins
-    #scheduler.add_job(refresh_weather_data, 'interval', minutes=50) #To run every 50 mins
-    #scheduler.add_job(refresh_ETA_data, 'interval', minutes=30) #To run every 30 mins
-    scheduler.start()
+    scheduler.add_job(refresh_access_token) # To run on startup
+
+    scheduler.add_job(refresh_weather_data, 'date', run_date=time_to_run_job) #To run after access token has been aquired
+    scheduler.add_job(refresh_ETA_data, 'date', run_date=time_to_run_job) #To run after access token has been aquired
+
+    # scheduler.add_job(refresh_access_token, 'interval', minutes=45) # To run every 45 mins
+    # scheduler.add_job(refresh_weather_data, 'interval', minutes=50) #To run every 50 mins
+    # scheduler.add_job(refresh_ETA_data, 'interval', minutes=30) #To run every 30 mins
+    #scheduler.start()
 
 def refresh_access_token():
     from SeaYou_Models.models import AccessToken
     try:
-        print("REFRESH TOKEN _ TASK STARTED")
+
+        current_datetime = datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        print("REFRESH TOKEN _ TASK STARTED: " + formatted_datetime)
+        
 
         # get access token
         api_url = os.getenv("NXTPORT_GET_TOKEN")
@@ -55,6 +64,10 @@ def refresh_access_token():
 
 def refresh_weather_data():
     from SeaYou_Models.models import AccessToken, WeatherCache
+
+    current_datetime = datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    print("WEATHER _ TASK STARTED: " + formatted_datetime)
 
     locations = ["bos", "kas", "kis", "ros", "zas", "k102"]
     accumulated_data = []
@@ -91,11 +104,15 @@ def refresh_weather_data():
             print(weather_response.text)
             continue
     
-    WeatherCache.objects.update_or_create(defaults={'cashed_weather_data': accumulated_data, 'updated_at': datetime.now()})
+    WeatherCache.objects.update_or_create(defaults={'cashed_weather_data': json.dumps(accumulated_data), 'updated_at': datetime.now()})
 
 
 def refresh_ETA_data():
     from SeaYou_Models.models import ETACache, AccessToken
+
+    current_datetime = datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    print("ETA _ TASK STARTED: " + formatted_datetime)
 
     current_access_token = AccessToken.objects.first().token
     eta_url = os.getenv("NXTPORT_ETA_URL")
@@ -112,12 +129,11 @@ def refresh_ETA_data():
     }
 
     eta_response = requests.get(eta_url, headers=eta_headers, params=eta_params)
-    eta_data = eta_response.json()
+    eta_data = eta_response.text
 
     if eta_response.status_code == 200:
         # Request was successful
         print(f"ETA API call successful!")
-        eta_data = eta_response.json()
         ETACache.objects.update_or_create(name = 'BEANR', defaults={"cashed_eta_data" : eta_data, "updated_at" : datetime.now()})
     else:
         print(f"ETA API call failed with status code: {eta_response.status_code}")
