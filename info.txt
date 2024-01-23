@@ -23,3 +23,6 @@ https://docs.djangoproject.com/en/5.0/topics/pagination/
 
 **DJANGO SECURITY**
 https://docs.djangoproject.com/en/5.0/topics/security/
+
+**DEPLOYMENT**
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment

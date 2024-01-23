@@ -21,19 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-d+$ja8mgi+y-+rz@ml#6mg7#w=1*=mx3!@n*96f#d*d63g01$o'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -54,21 +41,8 @@ INSTALLED_APPS = [
 # Added for Tailwind
 TAILWIND_APP_NAME = 'SeaYou_App'
 
-# # Added for compressor
-# COMPRESS_ROOT = BASE_DIR / 'static'
 
-# COMPRESS_ENABLED = True
 
-# STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
-
-# Added for API
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    ]
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -172,3 +146,23 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
+# SECURITY - CONFIGURE BEFORE DEPLOY
+
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+
+ALLOWED_HOSTS = []
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+# Serving static files in deployment: https://docs.djangoproject.com/en/4.2/howto/static-files/deployment/
