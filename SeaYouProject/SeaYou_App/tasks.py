@@ -18,6 +18,7 @@ def start():
     scheduler.add_job(refresh_weather_data, 'date', run_date=time_to_run_job) #To run after access token has been aquired
     scheduler.add_job(refresh_ETA_data, 'date', run_date=time_to_run_job) #To run after access token has been aquired
 
+    # UNCOMMENT TO RUN JOBS
     # scheduler.add_job(refresh_access_token, 'interval', minutes=45) # To run every 45 mins
     # scheduler.add_job(refresh_weather_data, 'interval', minutes=50) #To run every 50 mins
     # scheduler.add_job(refresh_ETA_data, 'interval', minutes=30) #To run every 30 mins
